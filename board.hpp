@@ -15,6 +15,7 @@ private:
     bool get(Side side, int x, int y);
     void set(Side side, int x, int y);
     bool onBoard(int x, int y);
+    int getCorners(Side side);
 
 public:
     Board();
