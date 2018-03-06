@@ -8,8 +8,11 @@ using namespace std;
 
 class Player {
 
+private:
+	Side side;
+	Side opponentSide;
 public:
-    Player(Side side);
+    Player(Side side1);
     ~Player();
 
     Move *doMove(Move *opponentsMove, int msLeft);
