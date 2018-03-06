@@ -252,48 +252,69 @@ int Board::getCorners(Side side)
 }
 
 /*
+ * Returns the standard inner product of 2 vectors
+ */
+int Board::dotProduct(int * pieces, int * weights)
+{
+	int sum = 0;
+	for (int i = 0; i < 64; i++)
+	{
+		int product = pieces[i];
+		product *= weights[i];
+		sum += product;
+	}
+	return sum;
+}
+
+/*
+ * Sets every value in the array to 0, 1, or -1 based on if it is empty, has my
+ * piece, or the other player's piece respectively.
+ */
+int* Board::fillPieces(Side side)
+{
+	int *pieces = new int[64];
+	int factor = 1;
+	if (side == WHITE)
+	{
+		factor = -1;
+	}
+	for (int i = 0; i < 64; i++)
+	{
+		if (!taken[i])
+		{
+			pieces[i] = 0;
+		}
+		else if(black[i])
+		{
+			pieces[i] = factor * 1;
+		}
+		else
+		{
+			pieces[i] = factor * -1;
+		}
+	}
+	return pieces;
+}
+
+/*
  * Returns a heuristic score
  */
-int Board::getScore(Side side, Side opponentSide, Move move)
+int Board::getScore(Side side, Side opponentSide)
 {
 	if (taken.count() > 60)
 	{
 		return count(side) - count(opponentSide);
 	}
-	int X = move.getX();
-	int Y = move.getY();
-	int c = 0;
+	int *pieces = fillPieces(side);
+	int weights[64] = {7,2,5,4,4,5,2,7,2,1,3,3,3,3,1,2,5,3,6,5,5,6,
+	3,5,4,3,5,6,6,
+	5,3,4,4,3,5,6,6,5,3,4,5,3,6,5,5,6,3,5,2,1,3,3,3,3,1,2,7,2,5,4,4,5,2,7};
+
+	int weighted_sum = dotProduct(pieces, weights);
+	delete pieces;
 	
-	int mobility_factor = 150;
-	int x_square = -50;
-	int c_square = -30;
-	int move_factor = 30;
-	int corner;
-	if (taken.count() < 30)
-	{
-		corner = 800;
-	}
-	else
-	{
-		corner = 100;
-	}
-	if ((X == 1 || X == 6) && (Y == 1 || Y == 6))
-	{
-		c += x_square;
-	}
-	else if ((X == 0 || X == 7) && (Y == 1 || Y == 6))
-	{
-		c += c_square;
-	}
-	else if ((X == 1 || X == 6) && (Y == 0 || Y == 7))
-	{
-		c += c_square;
-	}
-	
-	if ((X == 0 || X == 7) && (Y == 0 || Y == 7))
-	{
-		c += corner;
-	}
+	int mobility_factor = 5;
+	int weighted_factor = 20;
 	
 	int mobility = 0;
 	int myMoves = getMoves(side).count();
@@ -303,8 +324,7 @@ int Board::getScore(Side side, Side opponentSide, Move move)
 		mobility = mobility_factor * (myMoves - opMoves) / (myMoves + opMoves);
 	}
 	
-	
-	return mobility + c + myMoves * move_factor;
+	return mobility + weighted_factor * weighted_sum;
 }
 
 

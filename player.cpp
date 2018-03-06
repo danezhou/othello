@@ -35,15 +35,15 @@ Player::~Player() {
 TreeNode Player::minmax_tree(Board *b, int depth, bool finding_max, Move prev) {
     TreeNode x;
     if (depth == 0) {
-        x.score = b->getScore(side, opponentSide, prev);
+        x.score = b->getScore(side, opponentSide);
         return x;
     }
     else if (finding_max && !(b->hasMoves(side))) {
-        x.score = b->getScore(side, opponentSide, prev);
+        x.score = b->getScore(side, opponentSide);
         return x;
     }
     else if (!finding_max && !(b->hasMoves(opponentSide))) {
-        x.score = b->getScore(side, opponentSide, prev);
+        x.score = b->getScore(side, opponentSide);
         return x;
     }
     
@@ -106,25 +106,37 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     {
     	return nullptr;
     }
+    
     TreeNode mt;
     Move input(-1, -1);
-    mt = minmax_tree(board, 6, true, input);
-    // for (int i = 0; i < 64; i++)
-    // {
-    // 	if (moves[i])
-    // 	{
-    // 		Board *b = board->copy();
-    // 		Move move(i % 8, i / 8);
-    // 		b->doMove(&move, side);
-    // 		int score = b->getScore(side, opponentSide, move);
-    // 		if (score > maxScore)
-    // 		{
-    // 			maxMove = move;
-    // 		}
-    // 	}
-    // }
+    mt = minmax_tree(board, 7, true, input);
     Move best = mt.base;
     Move *m =  new Move(best.getX(), best.getY());
     board->doMove(m, side);
     return m;
+    
+    
+    /*
+    bitset<64> moves = board->getMoves(side);
+    Move maxMove(-1,-1);
+    int maxScore = -99999;
+    for (int i = 0; i < 64; i++)
+    {
+    	if (moves[i])
+     	{
+     		Board *b = board->copy();
+     		Move move(i % 8, i / 8);
+     		b->doMove(&move, side);
+     		int score = b->getScore(side, opponentSide);
+     		if (score > maxScore)
+     		{
+     			maxMove = move;
+     			maxScore = score;
+     		}
+     	}
+    }
+    Move *m =  new Move(maxMove.getX(), maxMove.getY());
+    board->doMove(m, side);
+    return m;
+    */
 }

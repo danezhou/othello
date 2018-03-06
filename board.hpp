@@ -16,6 +16,8 @@ private:
     void set(Side side, int x, int y);
     bool onBoard(int x, int y);
     int getCorners(Side side);
+    int dotProduct(int* pieces, int* weights);
+    int* fillPieces(Side side);
 
 public:
     Board();
@@ -31,7 +33,7 @@ public:
     int countWhite();
 
 	bitset<64> getMoves(Side side);
-	int getScore(Side side, Side opponentSide, Move move);
+	int getScore(Side side, Side opponentSide);
 	
     void setBoard(char data[]);
 };
