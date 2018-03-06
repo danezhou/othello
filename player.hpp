@@ -21,7 +21,7 @@ public:
     Player(Side side1);
     ~Player();
 
-    TreeNode minmax_tree(Board *b, int depth, bool finding_max, Move prev);
+    TreeNode minmax_tree(Board *b, int depth, Side playSide);
     Move *doMove(Move *opponentsMove, int msLeft);
 
     // Flag to tell if the player is running within the test_minimax context

@@ -204,52 +204,6 @@ bitset<64> Board::getMoves(Side side)
 	return moves;
 }
 
-/*
- * Returns the number of corners that on player has
- */
-int Board::getCorners(Side side)
-{
-	int num = 0;
-	if (side == BLACK)
-	{
-		if (black[0])
-		{
-			num += 1;
-		}
-		if (black[7])
-		{
-			num += 1;
-		}
-		if (black[56])
-		{
-			num += 1;
-		}
-		if (black[63])
-		{
-			num += 1;
-		}
-	}
-	else
-	{
-		if (taken[0] && !black[0])
-		{
-			num += 1;
-		}
-		if (taken[7] && !black[7])
-		{
-			num += 1;
-		}
-		if (taken[56] && !black[56])
-		{
-			num += 1;
-		}
-		if (taken[63] && !black[63])
-		{
-			num += 1;
-		}
-	}
-	return num;
-}
 
 /*
  * Returns the standard inner product of 2 vectors
@@ -301,7 +255,7 @@ int* Board::fillPieces(Side side)
  */
 int Board::getScore(Side side, Side opponentSide)
 {
-	if (taken.count() > 60)
+	if (taken.count() > 70)
 	{
 		return count(side) - count(opponentSide);
 	}
@@ -313,8 +267,8 @@ int Board::getScore(Side side, Side opponentSide)
 	int weighted_sum = dotProduct(pieces, weights);
 	delete pieces;
 	
-	int mobility_factor = 5;
-	int weighted_factor = 20;
+	int mobility_factor = 0;
+	int weighted_factor = 1;
 	
 	int mobility = 0;
 	int myMoves = getMoves(side).count();
