@@ -22,7 +22,6 @@ Player::Player(Side side1) {
 	{
 		opponentSide = WHITE;
 	}
-	
 }
 
 /*
@@ -51,5 +50,23 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     {
     	return nullptr;
     }
-    
+    bitset<64> moves = board->getMoves(side);
+    int maxScore = -99999999;
+    Move *maxMove;
+    for (int i = 0; i < 64; i++)
+    {
+    	if (moves[i])
+    	{
+    		Board *b = board->copy();
+    		Move *move = new Move(i % 8, i / 8);
+    		b->doMove(move, side);
+    		int score = b->getScore(side, opponentSide);
+    		if (score > maxScore)
+    		{
+    			maxMove = move;
+    		}
+    		delete move;
+    	}
+    }
+    return maxMove;
 }

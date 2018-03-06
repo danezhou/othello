@@ -11,6 +11,7 @@ class Player {
 private:
 	Side side;
 	Side opponentSide;
+	Board *board;
 public:
     Player(Side side1);
     ~Player();

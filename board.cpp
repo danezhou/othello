@@ -186,17 +186,24 @@ void Board::setBoard(char data[]) {
 bitset<64> Board::getMoves(Side side)
 {
 	bitset<64> moves;
-	for (int r = 0; r < 8; r++)
+	for (int x = 0; x < 8; x++)
 	{
-		for (int c = 0; c < 8; c++)
+		for (int y = 0; y < 8; y++)
 		{
-			Move m = Move(r, c);
+			Move *m = new Move(x, y);
 			if (checkMove(m, side))
 			{
-				moves.set(c + 8 * r);
+				moves.set(x + 8 * y);
 			}
+			delete m;
 		}
 	}
 	return moves;
 }
+
+int Board::getScore(Side side, Side opponentSide)
+{
+	return count(side) - count(opponentSide);
+}
+
 
