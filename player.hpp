@@ -7,9 +7,9 @@
 using namespace std;
 
 struct TreeNode {
-	Move base;
+	Move base = Move(-1, -1);
 	int score;
-}
+};
 
 class Player {
 
@@ -21,7 +21,7 @@ public:
     Player(Side side1);
     ~Player();
 
-    int minmax_tree(Board *b, int n);
+    TreeNode minmax_tree(Board *b, int depth, bool finding_max, Move prev);
     Move *doMove(Move *opponentsMove, int msLeft);
 
     // Flag to tell if the player is running within the test_minimax context
