@@ -256,7 +256,7 @@ int Board::getCorners(Side side)
  */
 int Board::getScore(Side side, Side opponentSide, Move move)
 {
-	if (taken.count() > 52)
+	if (taken.count() > 60)
 	{
 		return count(side) - count(opponentSide);
 	}
@@ -265,10 +265,18 @@ int Board::getScore(Side side, Side opponentSide, Move move)
 	int c = 0;
 	
 	int mobility_factor = 150;
-	int corner_f = 200;
-	int x_square = -80;
-	int c_square = -50;
+	int x_square = -50;
+	int c_square = -30;
 	int move_factor = 30;
+	int corner;
+	if (taken.count() < 30)
+	{
+		corner = 800;
+	}
+	else
+	{
+		corner = 100;
+	}
 	if ((X == 1 || X == 6) && (Y == 1 || Y == 6))
 	{
 		c += x_square;
@@ -282,12 +290,9 @@ int Board::getScore(Side side, Side opponentSide, Move move)
 		c += c_square;
 	}
 	
-	int corners = 0;
-	int myCorners = getCorners(side);
-	int opCorners = getCorners(opponentSide);
-	if (myCorners + opCorners != 0)
+	if ((X == 0 || X == 7) && (Y == 0 || Y == 7))
 	{
-		corners = corner_f * (myCorners - opCorners) / (myCorners + opCorners);
+		c += corner;
 	}
 	
 	int mobility = 0;
@@ -298,7 +303,8 @@ int Board::getScore(Side side, Side opponentSide, Move move)
 		mobility = mobility_factor * (myMoves - opMoves) / (myMoves + opMoves);
 	}
 	
-	return mobility + c + corners + myMoves * move_factor;
+	
+	return mobility + c + myMoves * move_factor;
 }
 
 

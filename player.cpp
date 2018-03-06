@@ -108,7 +108,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     }
     TreeNode mt;
     Move input(-1, -1);
-    mt = minmax_tree(board, 2, true, input);
+    mt = minmax_tree(board, 6, true, input);
     // for (int i = 0; i < 64; i++)
     // {
     // 	if (moves[i])
