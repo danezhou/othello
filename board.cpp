@@ -1,5 +1,6 @@
 #include "board.hpp"
 #include <iostream>
+#include <algorithm>
 
 /*
  * Make a standard 8x8 othello board and initialize it to the standard setup.
@@ -204,30 +205,100 @@ bitset<64> Board::getMoves(Side side)
 }
 
 /*
+ * Returns the number of corners that on player has
+ */
+int Board::getCorners(Side side)
+{
+	int num = 0;
+	if (side == BLACK)
+	{
+		if (black[0])
+		{
+			num += 1;
+		}
+		if (black[7])
+		{
+			num += 1;
+		}
+		if (black[56])
+		{
+			num += 1;
+		}
+		if (black[63])
+		{
+			num += 1;
+		}
+	}
+	else
+	{
+		if (taken[0] && !black[0])
+		{
+			num += 1;
+		}
+		if (taken[7] && !black[7])
+		{
+			num += 1;
+		}
+		if (taken[56] && !black[56])
+		{
+			num += 1;
+		}
+		if (taken[63] && !black[63])
+		{
+			num += 1;
+		}
+	}
+	return num;
+}
+
+/*
  * Returns a heuristic score
  */
 int Board::getScore(Side side, Side opponentSide, Move move)
 {
-	int c = 0;
+	if (taken.count() > 52)
+	{
+		return count(side) - count(opponentSide);
+	}
 	int X = move.getX();
 	int Y = move.getY();
-	if (X == 0 || X == 7)
+	int c = 0;
+	
+	int mobility_factor = 150;
+	int corner_f = 200;
+	int x_square = -80;
+	int c_square = -50;
+	int move_factor = 30;
+	if ((X == 1 || X == 6) && (Y == 1 || Y == 6))
 	{
-		c += 1;
+		c += x_square;
 	}
-	if (Y == 0 || Y == 7)
+	else if ((X == 0 || X == 7) && (Y == 1 || Y == 6))
 	{
-		c += 1;
+		c += c_square;
 	}
-	if (X > 2 && X < 5)
+	else if ((X == 1 || X == 6) && (Y == 0 || Y == 7))
 	{
-		c -= 1;
+		c += c_square;
 	}
-	if (Y > 2 && Y < 5)
+	
+	int corners = 0;
+	int myCorners = getCorners(side);
+	int opCorners = getCorners(opponentSide);
+	if (myCorners + opCorners != 0)
 	{
-		c -= 1;
+		corners = corner_f * (myCorners - opCorners) / (myCorners + opCorners);
 	}
-	return c + count(side) - count(opponentSide);
+	
+	int mobility = 0;
+	int myMoves = getMoves(side).count();
+	int opMoves = getMoves(opponentSide).count();
+	if (myMoves + opMoves != 0)
+	{
+		mobility = mobility_factor * (myMoves - opMoves) / (myMoves + opMoves);
+	}
+	
+	return mobility + c + corners + myMoves * move_factor;
 }
 
 
