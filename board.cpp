@@ -178,3 +178,25 @@ void Board::setBoard(char data[]) {
         }
     }
 }
+
+/*
+ * Returns a bitset containing all the possible moves that one of the sides
+ * can make. Value is 1 if move is possible.
+ */
+bitset<64> Board::getMoves(Side side)
+{
+	bitset<64> moves;
+	for (int r = 0; r < 8; r++)
+	{
+		for (int c = 0; c < 8; c++)
+		{
+			Move m = Move(r, c);
+			if (checkMove(m, side))
+			{
+				moves.set(c + 8 * r);
+			}
+		}
+	}
+	return moves;
+}
+
