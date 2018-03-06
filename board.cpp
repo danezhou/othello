@@ -1,4 +1,5 @@
 #include "board.hpp"
+#include <iostream>
 
 /*
  * Make a standard 8x8 othello board and initialize it to the standard setup.
@@ -61,6 +62,7 @@ bool Board::hasMoves(Side side) {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             Move move(i, j);
+            //std::cerr << side << std::endl;
             if (checkMove(&move, side)) return true;
         }
     }
@@ -73,14 +75,15 @@ bool Board::hasMoves(Side side) {
 bool Board::checkMove(Move *m, Side side) {
     // Passing is only legal if you have no moves.
     if (m == nullptr) return !hasMoves(side);
-
+    
     int X = m->getX();
     int Y = m->getY();
-
     // Make sure the square hasn't already been taken.
+
     if (occupied(X, Y)) return false;
 
     Side other = (side == BLACK) ? WHITE : BLACK;
+    
     for (int dx = -1; dx <= 1; dx++) {
         for (int dy = -1; dy <= 1; dy++) {
             if (dy == 0 && dx == 0) continue;
@@ -190,20 +193,41 @@ bitset<64> Board::getMoves(Side side)
 	{
 		for (int y = 0; y < 8; y++)
 		{
-			Move *m = new Move(x, y);
-			if (checkMove(m, side))
+			Move m(x, y);
+			if (checkMove(&m, side))
 			{
 				moves.set(x + 8 * y);
 			}
-			delete m;
 		}
 	}
 	return moves;
 }
 
-int Board::getScore(Side side, Side opponentSide)
+/*
+ * Returns a heuristic score
+ */
+int Board::getScore(Side side, Side opponentSide, Move move)
 {
-	return count(side) - count(opponentSide);
+	int c = 0;
+	int X = move.getX();
+	int Y = move.getY();
+	if (X == 0 || X == 7)
+	{
+		c += 1;
+	}
+	if (Y == 0 || Y == 7)
+	{
+		c += 1;
+	}
+	if (X > 2 && X < 5)
+	{
+		c -= 1;
+	}
+	if (Y > 2 && Y < 5)
+	{
+		c -= 1;
+	}
+	return c + count(side) - count(opponentSide);
 }
 
 

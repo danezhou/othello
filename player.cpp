@@ -11,8 +11,9 @@
 Player::Player(Side side1) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
-	
-	Board *board = new Board();
+
+	board = new Board();
+
 	side = side1;
 	if (side == WHITE)
 	{
@@ -46,27 +47,28 @@ Player::~Player() {
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
     board->doMove(opponentsMove, opponentSide);
-    if (!board->hasMoves(side))
+    if (!(board->hasMoves(side)))
     {
     	return nullptr;
     }
     bitset<64> moves = board->getMoves(side);
     int maxScore = -99999999;
-    Move *maxMove;
+    Move maxMove(-1,-1);
     for (int i = 0; i < 64; i++)
     {
     	if (moves[i])
     	{
     		Board *b = board->copy();
-    		Move *move = new Move(i % 8, i / 8);
-    		b->doMove(move, side);
-    		int score = b->getScore(side, opponentSide);
+    		Move move(i % 8, i / 8);
+    		b->doMove(&move, side);
+    		int score = b->getScore(side, opponentSide, move);
     		if (score > maxScore)
     		{
     			maxMove = move;
     		}
-    		delete move;
     	}
     }
-    return maxMove;
+    Move *m =  new Move(maxMove.getX(), maxMove.getY());
+    board->doMove(m, side);
+    return m;
 }

@@ -30,7 +30,7 @@ public:
     int countWhite();
 
 	bitset<64> getMoves(Side side);
-	int getScore(Side side, Side opponentSide);
+	int getScore(Side side, Side opponentSide, Move move);
 	
     void setBoard(char data[]);
 };
