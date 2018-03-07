@@ -255,9 +255,10 @@ int* Board::fillPieces(Side side)
  */
 int Board::getScore(Side side, Side opponentSide)
 {
-	if (taken.count() > 70)
+	int ps = 0;
+	if (taken.count() > 60)
 	{
-		return count(side) - count(opponentSide);
+		ps = count(side) - count(opponentSide);
 	}
 	int *pieces = fillPieces(side);
 	int weights[64] = {7,2,5,4,4,5,2,7,2,1,3,3,3,3,1,2,5,3,6,5,5,6,
@@ -268,7 +269,8 @@ int Board::getScore(Side side, Side opponentSide)
 	delete pieces;
 	
 	int mobility_factor = 0;
-	int weighted_factor = 1;
+	int weighted_factor = 100;
+	int pfactor = 10;
 	
 	int mobility = 0;
 	int myMoves = getMoves(side).count();
@@ -278,7 +280,7 @@ int Board::getScore(Side side, Side opponentSide)
 		mobility = mobility_factor * (myMoves - opMoves) / (myMoves + opMoves);
 	}
 	
-	return mobility + weighted_factor * weighted_sum;
+	return mobility + weighted_factor * weighted_sum + pfactor* ps;
 }
 
 
