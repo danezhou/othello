@@ -270,7 +270,7 @@ int Board::getScore(Side side, Side opponentSide)
 	
 	int mobility_factor = 0;
 	int weighted_factor = 100;
-	int pfactor = 10;
+	int pfactor = 00;
 	
 	int mobility = 0;
 	int myMoves = getMoves(side).count();

@@ -106,7 +106,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     }
     
     TreeNode mt;
-    mt = minmax_tree(board, 1, side);
+    mt = minmax_tree(board, 2, side);
     Move best = mt.base;
     Move *m =  new Move(best.getX(), best.getY());
     board->doMove(m, side);
