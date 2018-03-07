@@ -85,6 +85,10 @@ TreeNode Player::minmax_tree(Board *b, int depth, Side playSide)
     
 }
 
+void Player::setTheBoard(char data[]) {
+    board->setBoard(data);
+}
+
 /*
  * Compute the next move given the opponent's last move. Your AI is
  * expected to keep track of the board on its own. If this is the first move,
@@ -106,7 +110,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     }
     
     TreeNode mt;
-    mt = minmax_tree(board, 6, side);
+    mt = minmax_tree(board, 4, side);
     Move best = mt.base;
     Move *m =  new Move(best.getX(), best.getY());
     board->doMove(m, side);

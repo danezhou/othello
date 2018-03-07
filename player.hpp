@@ -23,6 +23,7 @@ public:
 
     TreeNode minmax_tree(Board *b, int depth, Side playSide);
     Move *doMove(Move *opponentsMove, int msLeft);
+    void setTheBoard(char data[]);
 
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;
