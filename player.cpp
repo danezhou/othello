@@ -31,7 +31,6 @@ TreeNode Player::minmax_tree(Board *b, int depth, Side playSide)
     Side other = (playSide == BLACK) ? WHITE : BLACK;
     if (depth == 0) {
         x.score = b->getScore(side, opponentSide);
-        std::cerr << x.score << std::endl;
         return x;
     }
     else if (!(b->hasMoves(playSide))) {
@@ -52,7 +51,7 @@ TreeNode Player::minmax_tree(Board *b, int depth, Side playSide)
         int v;
         for (int i = 0; i < 64; i++) {
             if (moves[i]) {
-                Board *b2 = board->copy();
+                Board *b2 = b->copy();
                 Move move(i % 8, i / 8);
                 b2->doMove(&move, playSide);
                 v = minmax_tree(b2, depth-1, other).score;
@@ -71,7 +70,7 @@ TreeNode Player::minmax_tree(Board *b, int depth, Side playSide)
         int v;
         for (int i = 0; i < 64; i++) {
             if (moves[i]) {
-                Board *b2 = board->copy();
+                Board *b2 = b->copy();
                 Move move(i % 8, i / 8);
                 b2->doMove(&move, opponentSide);
                 v = minmax_tree(b2, depth-1, other).score;
@@ -111,7 +110,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     }
     
     TreeNode mt;
-    mt = minmax_tree(board, 2, side);
+    mt = minmax_tree(board, 6, side);
     Move best = mt.base;
     Move *m =  new Move(best.getX(), best.getY());
     board->doMove(m, side);
