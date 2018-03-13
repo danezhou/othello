@@ -25,16 +25,18 @@ Player::~Player() {
 	delete board;
 }
 
-TreeNode Player::minmax_tree(Board *b, int depth, Side playSide)
+TreeNode Player::minmax_tree(Board *b, int depth, int x, int y, Side playSide)
 {
-    TreeNode x;
+    TreeNode n;
+    int alpha = x;
+    int beta = y;
     Side other = (playSide == BLACK) ? WHITE : BLACK;
     if (depth == 0) {
-        x.score = b->getScore(side, opponentSide);
-        return x;
+        n.score = b->getScore(side, opponentSide);
+        return n;
     }
     else if (!(b->hasMoves(playSide))) {
-        TreeNode v = minmax_tree(b, depth-1, other);
+        TreeNode v = minmax_tree(b, depth-1, alpha, beta, other);
         return v;
     }
     /*
@@ -54,10 +56,16 @@ TreeNode Player::minmax_tree(Board *b, int depth, Side playSide)
                 Board *b2 = b->copy();
                 Move move(i % 8, i / 8);
                 b2->doMove(&move, playSide);
-                v = minmax_tree(b2, depth-1, other).score;
+                v = minmax_tree(b2, depth-1, alpha, beta, other).score;
                 if (v > best_move.score) {
                     best_move.score = v;
                     best_move.base = move;
+                }
+                if (v > alpha) {
+                    alpha = v;
+                }
+                if (beta < alpha) {
+                    break;
                 }
             }
         }
@@ -73,10 +81,16 @@ TreeNode Player::minmax_tree(Board *b, int depth, Side playSide)
                 Board *b2 = b->copy();
                 Move move(i % 8, i / 8);
                 b2->doMove(&move, opponentSide);
-                v = minmax_tree(b2, depth-1, other).score;
+                v = minmax_tree(b2, depth-1, alpha, beta, other).score;
                 if (v < worst_move.score) {
                     worst_move.score = v;
                     worst_move.base = move;
+                }
+                if (v < beta) {
+                    beta = v;
+                }
+                if (beta < alpha) {
+                    break;
                 }
             }
         }
@@ -110,7 +124,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     }
     
     TreeNode mt;
-    mt = minmax_tree(board, 6, side);
+    mt = minmax_tree(board, 6, -999999, 999999, side);
     Move best = mt.base;
     Move *m =  new Move(best.getX(), best.getY());
     board->doMove(m, side);

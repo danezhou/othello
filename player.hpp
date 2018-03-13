@@ -21,7 +21,7 @@ public:
     Player(Side side1);
     ~Player();
 
-    TreeNode minmax_tree(Board *b, int depth, Side playSide);
+    TreeNode minmax_tree(Board *b, int depth, int x, int y, Side playSide);
     Move *doMove(Move *opponentsMove, int msLeft);
     void setTheBoard(char data[]);
 

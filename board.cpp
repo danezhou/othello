@@ -260,22 +260,23 @@ int Board::getScore(Side side, Side opponentSide)
 		return count(side) - count(opponentSide);
 	}
 	int *pieces = fillPieces(side);
-	int weights[64] = {7,2,5,4,4,5,2,7,2,1,3,3,3,3,1,2,5,3,6,5,5,6,
-	3,5,4,3,5,6,6,
-	5,3,4,4,3,5,6,6,5,3,4,5,3,6,5,5,6,3,5,2,1,3,3,3,3,1,2,7,2,5,4,4,5,2,7};
+	int weights[64] = {100,-20,10,5,5,10,-20,100,-20,-50,-2,-2,-2,-2,-50,-20,10,-2,-1,-1,-1,-1,
+	-2,10,5,-2,-1,-1,-1,-1,-2,5,5,-2,-1,-1,-1,-1,-2,5,10,-2,-1,-1,-1,-1,-2,10,-20,-50,
+    -2,-2,-2,-2,-50,-20,100,-20,10,5,5,10,-20,100};
 
 	int weighted_sum = dotProduct(pieces, weights);
 	delete pieces;
 	
-	int mobility_factor = 0;
+	double mobility_factor = 10.;
 	int weighted_factor = 1;
+
 	
-	int mobility = 0;
+	double mobility = 0;
 	int myMoves = getMoves(side).count();
 	int opMoves = getMoves(opponentSide).count();
 	if (myMoves + opMoves != 0)
 	{
-		mobility = mobility_factor * (myMoves - opMoves) / (myMoves + opMoves);
+		mobility = (mobility_factor * (myMoves - opMoves)) / (myMoves + opMoves);
 	}
 	
 	return mobility + weighted_factor * weighted_sum;
