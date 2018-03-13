@@ -67,6 +67,7 @@ TreeNode Player::minmax_tree(Board *b, int depth, int x, int y, Side playSide)
                 if (beta < alpha) {
                     break;
                 }
+                delete b2;
             }
         }
         return best_move;
@@ -92,6 +93,7 @@ TreeNode Player::minmax_tree(Board *b, int depth, int x, int y, Side playSide)
                 if (beta < alpha) {
                     break;
                 }
+                delete b2;
             }
         }
         return worst_move;
@@ -124,7 +126,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     }
     
     TreeNode mt;
-    mt = minmax_tree(board, 6, -999999, 999999, side);
+    mt = minmax_tree(board, 8, -999999, 999999, side);
     Move best = mt.base;
     Move *m =  new Move(best.getX(), best.getY());
     board->doMove(m, side);

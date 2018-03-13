@@ -255,6 +255,10 @@ int* Board::fillPieces(Side side)
  */
 int Board::getScore(Side side, Side opponentSide)
 {
+	if (count(side) == 0)
+	{
+		return -999999;
+	}
 	if (taken.count() > 60)
 	{
 		return count(side) - count(opponentSide);
