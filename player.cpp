@@ -67,7 +67,6 @@ TreeNode Player::minmax_tree(Board *b, int depth, int x, int y, Side playSide)
                 if (beta < alpha) {
                     break;
                 }
-                delete b2;
             }
         }
         return best_move;
@@ -93,7 +92,6 @@ TreeNode Player::minmax_tree(Board *b, int depth, int x, int y, Side playSide)
                 if (beta < alpha) {
                     break;
                 }
-                delete b2;
             }
         }
         return worst_move;
