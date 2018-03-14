@@ -9,4 +9,5 @@ Group Improvements
 -added minmax tree
 -tuned heuristic
 -added alpha beta pruning, allowing program to search to depth 6 within time constraints
+-updating cost table depending on board position
 -tried searching to a larger depth, but number of calculations took too much time

@@ -264,9 +264,30 @@ int Board::getScore(Side side, Side opponentSide)
 		return count(side) - count(opponentSide);
 	}
 	int *pieces = fillPieces(side);
-	int weights[64] = {100,-20,10,5,5,10,-20,100,-20,-50,-2,-2,-2,-2,-50,-20,10,-2,-1,-1,-1,-1,
-	-2,10,5,-2,-1,-1,-1,-1,-2,5,5,-2,-1,-1,-1,-1,-2,5,10,-2,-1,-1,-1,-1,-2,10,-20,-50,
-    -2,-2,-2,-2,-50,-20,100,-20,10,5,5,10,-20,100};
+	int weights[64] = {100,-20,10,5,5,10,-20,100,-20,-50,1,1,1,1,-50,-20,10,1,2,2,2,2,
+	1,10,5,1,2,2,2,2,1,5,5,1,2,2,2,2,1,5,10,1,2,2,2,2,1,10,-20,-50,
+    1,1,1,1,-50,-20,100,-20,10,5,5,10,-20,100};
+
+    if (taken[0]) {
+        weights[1] = 20;
+        weights[8] = 20;
+        weights[9] = -10;
+    }
+    if (taken[7]) {
+        weights[6] = 20;
+        weights[15] = 20;
+        weights[14] = -10;
+    }
+    if (taken[56]) {
+        weights[48] = 20;
+        weights[57] = 20;
+        weights[49] = -10;
+    }
+    if (taken[63]) {
+        weights[62] = 20;
+        weights[55] = 20;
+        weights[54] = -10;
+    }
 
 	int weighted_sum = dotProduct(pieces, weights);
 	delete pieces;
