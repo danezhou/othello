@@ -259,7 +259,7 @@ int Board::getScore(Side side, Side opponentSide)
 	{
 		return -999999;
 	}
-	if (taken.count() > 60)
+	if (taken.count() > 62)
 	{
 		return count(side) - count(opponentSide);
 	}
